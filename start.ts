@@ -1,7 +1,10 @@
 import express, { Application } from "express";
 import { mainApp } from "./mainApp";
+import "./utils/dbConfig";
+import cors from "cors";
 
 const app: Application = express();
+app.use(cors());
 app.use(express.json());
 const port: number = 2255;
 
