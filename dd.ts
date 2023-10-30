@@ -1,6 +1,6 @@
-class Nodes {
+class Noded {
   public val: number;
-  public next: Nodes | null | any;
+  public next: Noded | null | any;
 
   constructor(val: number) {
     this.val = val;
@@ -8,9 +8,9 @@ class Nodes {
   }
 }
 
-class LinkList {
-  public head: Nodes | null | any;
-  public tail: Nodes | null | any;
+class Link {
+  public head: Noded | null | any;
+  public tail: Noded | null | any;
   public length: number;
 
   constructor() {
@@ -19,9 +19,8 @@ class LinkList {
     this.length = 0;
   }
 
-  // push
   addTail(val: number) {
-    let node = new Nodes(val);
+    let node = new Noded(val);
 
     if (!this.head) {
       this.head = node;
@@ -30,16 +29,17 @@ class LinkList {
       this.tail.next = node;
       this.tail = node;
     }
+
     this.length++;
     return this;
   }
 
-  // unshift
   addHead(val: number) {
-    let node = new Nodes(val);
+    let node = new Noded(val);
+
     if (!this.head) {
       this.head = node;
-      this.tail = null;
+      this.tail = this.head;
     } else {
       node.next = this.head;
       this.head = node;
@@ -49,48 +49,45 @@ class LinkList {
     return this;
   }
 
-  // pop
   removeTail() {
     if (!this.head) {
       return undefined;
     } else {
-      let current = this.tail;
-      let nextTail = current;
+      let current = this.head;
+      let newTail = current;
 
       while (current.next) {
-        this.tail = nextTail;
-        this.tail.next = null;
+        newTail = current;
+        current = current.next;
       }
+      this.tail = newTail;
+      this.tail.next = null;
+
       this.length--;
       return current;
     }
   }
 
-  // shift
   removeHead() {
     if (!this.head) {
       return undefined;
     } else {
       let current = this.head;
-      let newHead = current;
+      this.head = current.next;
 
-      while (current.next) {
-        this.head = newHead;
-        this.head.next = null;
-      }
       this.length--;
       return current;
     }
   }
 
   get(index: number) {
-    if (index < 0 || index >= this.length) {
-      return "Out of Range";
+    if (index < 0 || index > this.length) {
+      return undefined;
     } else {
       let count: number = 0;
       let current = this.head;
 
-      while (count !== index) {
+      while (index !== count) {
         current = current.next;
         count++;
       }
@@ -111,9 +108,11 @@ class LinkList {
   }
 
   insert(index: number, val: number) {
-    let node = new Nodes(val);
+    let node = new Noded(val);
+    if (index < 0 || index > this.length) {
+      return "Oi]ut of range";
+    }
 
-    if (index < 0 || index > this.length) return "Out of Range";
     if (index === 0) return !!this.addHead(val);
     if (index === this.length) return !!this.addTail(val);
 
@@ -124,11 +123,12 @@ class LinkList {
     node.next = temp;
 
     this.length++;
-    return true;
+    return this;
   }
 
   remove(index: number) {
-    if (index < 0 || index > this.length) return "Out of Range";
+    if (index < 0 || index > this.length) return undefined;
+
     if (index === 0) return !!this.removeHead();
     if (index === this.length) return !!this.removeTail();
 
@@ -138,27 +138,24 @@ class LinkList {
     prev.next = temp.next;
 
     this.length--;
-    return temp;
+    return true;
   }
 }
 
-let linkList = new LinkList();
+let link = new Link();
 
-linkList.addTail(90);
-linkList.addTail(3);
-linkList.addTail(31);
-linkList.addTail(4);
-linkList.addTail(9);
+link.addTail(25);
+link.addTail(23);
+link.addTail(20);
+link.addHead(40);
 
-console.clear();
-// console.log("Nodes removed from the List: ", linkList.removeHead());
-// console.log("total Nodes in the List:", linkList.length);
-// console.log("get Nodes by Position in the List:", linkList.get(0));
+console.log();
+// console.log(link.removeHead());
 
-// console.log("get Nodes by Position in the List:");
-// console.log(linkList.set(0, 25));
-console.log(linkList.remove(1));
+console.log();
+console.log(link.set(1, 33));
+console.log(link);
+console.log(link.remove(1));
 
-console.log("total Nodes in the List:", linkList.length);
-console.log("viewing Nodes in the List:", linkList);
-// console.log("get Nodes by Position in the List:", linkList.get(0));
+console.log();
+console.log(link);
